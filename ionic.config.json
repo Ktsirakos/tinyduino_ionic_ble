@@ -1,5 +1,7 @@
 {
   "name": "tinyduino_ionic",
-  "integrations": {},
+  "integrations": {
+    "cordova": {}
+  },
   "type": "angular"
 }

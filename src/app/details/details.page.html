@@ -1,0 +1,107 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>{{ peripheral.name || 'Device' }}</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+
+<ion-content class="padding">
+  
+  <!-- <button (click)="sendPredefinedMessage('hellomatebutton')">Press Me</button>
+  <button (click)="readMessage()">Press Me</button>
+  <button (click)="readMessage1()">Press Me 1</button>
+  <button (click)="readMessage2()">Press Me 2</button> -->
+
+<!--
+  <ion-card>
+    <ion-card-header>
+      Services
+    </ion-card-header>
+
+    <ion-list>
+      <ion-item *ngFor="let service of peripheral.services">
+        {{service}}
+      </ion-item>
+    </ion-list>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header>
+      Details
+    </ion-card-header>
+    <ion-card-content>
+      <pre>{{peripheral | json }}</pre>
+    </ion-card-content>
+  </ion-card> -->
+
+
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <p>{{stateMessage}}</p>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="started">
+      <ion-col>
+        <p>X</p>
+      </ion-col>
+      <ion-col>
+        <p>Y</p>
+      </ion-col>
+      <ion-col>
+        <p>Z</p>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="started">
+      <ion-col><p class="accelerationP"  id="consoleX">{{acceleration.x}}</p></ion-col>
+      <ion-col><p class="accelerationP" id="consoleY"> {{acceleration.y}}</p></ion-col>
+      <ion-col><p class="accelerationP" id="consoleZ"> {{acceleration.z}}</p></ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <p>{{timeelapsed}}</p>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+<!-- <ion-grid>
+  <ion-row>
+    <ion-col>
+      <div *ngIf="peripheral">
+        <ion-button expand="full" color="primary" (click)="startTrasmitting()">
+          Start
+        </ion-button>
+    
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <p>X</p>
+            </ion-col>
+            <ion-col>
+              <p>Y</p>
+            </ion-col>
+            <ion-col>
+              <p>Z</p>
+            </ion-col>
+          </ion-row>
+         <ion-row>
+           <ion-col><p class="accelerationP"  id="consoleX">{{acceleration.x}}</p></ion-col>
+           <ion-col><p class="accelerationP" id="consoleY"> {{acceleration.y}}</p></ion-col>
+           <ion-col><p class="accelerationP" id="consoleZ"> {{acceleration.z}}</p></ion-col>
+         </ion-row> 
+        </ion-grid>
+        <ion-button expand="full" color="primary"  (click)="saveFile()">Stop Recording</ion-button>
+      </div>
+    </ion-col>
+  </ion-row>
+</ion-grid> -->
+
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-button expand="full" *ngIf="buttonState == 'start'" (click)="readMessagesage()">Start</ion-button>
+    <ion-button expand="full" *ngIf="buttonState == 'stop'" (click)="saveFile()">Stop</ion-button>
+    <!-- <p>{{ statusMessage }}</p> -->
+  </ion-toolbar>
+</ion-footer>
