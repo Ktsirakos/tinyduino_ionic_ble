@@ -11,13 +11,11 @@
 
   <ion-button color="primary" expand="full">Scan</ion-button>
    <ion-list> 
-    <ion-button color="secondary" expand="full" *ngFor="let device of devices" (click)="deviceSelected(device)">
-      <h2>{{ device.name || 'Unnamed' }}</h2>
-      <p>{{ device.id }}</p>
-      <p>RSSI: {{ device.rssi }}</p>
+    <ion-button color="secondary" expand="full" style="height: 50px" *ngFor="let device of devices" (click)="deviceSelected(device)">
+      <h2>{{ device.name }}</h2>
     </ion-button>  
    </ion-list> 
-</ion-content>
+  </ion-content>
 
 <ion-footer>
   <ion-toolbar>

@@ -62,40 +62,12 @@
         <p>{{timeelapsed}}</p>
       </ion-col>
     </ion-row>
+    <ion-row>
+      <ion-col>
+        <p>{{fps}}</p>
+      </ion-col>
+    </ion-row>
   </ion-grid>
-
-<!-- <ion-grid>
-  <ion-row>
-    <ion-col>
-      <div *ngIf="peripheral">
-        <ion-button expand="full" color="primary" (click)="startTrasmitting()">
-          Start
-        </ion-button>
-    
-        <ion-grid>
-          <ion-row>
-            <ion-col>
-              <p>X</p>
-            </ion-col>
-            <ion-col>
-              <p>Y</p>
-            </ion-col>
-            <ion-col>
-              <p>Z</p>
-            </ion-col>
-          </ion-row>
-         <ion-row>
-           <ion-col><p class="accelerationP"  id="consoleX">{{acceleration.x}}</p></ion-col>
-           <ion-col><p class="accelerationP" id="consoleY"> {{acceleration.y}}</p></ion-col>
-           <ion-col><p class="accelerationP" id="consoleZ"> {{acceleration.z}}</p></ion-col>
-         </ion-row> 
-        </ion-grid>
-        <ion-button expand="full" color="primary"  (click)="saveFile()">Stop Recording</ion-button>
-      </div>
-    </ion-col>
-  </ion-row>
-</ion-grid> -->
-
 </ion-content>
 
 <ion-footer>

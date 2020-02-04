@@ -23,7 +23,6 @@ export class DetailsPage implements OnInit {
   stateMessage: string  = "Press start to start recording";
   statusMessage : string;
   interval: any;
-  fps : number;
   csv: any;
   headerRow: String[] ;
   writeInterval: any;
@@ -32,6 +31,9 @@ export class DetailsPage implements OnInit {
   started: boolean;
   timeelapsed : string = "Time: 0s";
   modal : any;
+  fps : string = "FPS: 0"
+  counter: any = 0;
+  fpsInterval: any;
   constructor(
     private route: ActivatedRoute,
     private router : Router,
@@ -173,9 +175,16 @@ export class DetailsPage implements OnInit {
       this.now = Date.now();
       this.writeInterval = setInterval(() => {
         this.csv.push([this.acceleration.x , this.acceleration.y , this.acceleration.z , Date.now() - this.now]);
+        this.counter++;
         this.timeelapsed = `Time: ${((Date.now() - this.now) / 1000).toFixed(1)}s`
         // console.log(this.acceleration);
       } , 10)
+
+
+      this.fpsInterval = setInterval(() => {
+        this.fps = `FPS: ${this.counter}`
+        this.counter = 0;
+      } , 1000)
       
   
       this.ble.startNotification(this.peripheral.id , this.SERVICE ,"6e400003-b5a3-f393-e0a9-e50e24dcca9e").subscribe(
@@ -203,6 +212,7 @@ export class DetailsPage implements OnInit {
         () => {
           console.log('Disconnected ' + JSON.stringify(this.peripheral))
           clearInterval(this.writeInterval);
+          clearInterval(this.fpsInterval);
           // this.router.navigateByUrl('/home');
         },
         () => console.log('ERROR disconnecting ' + JSON.stringify(this.peripheral))

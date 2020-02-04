@@ -5,6 +5,7 @@ import { Http } from "@angular/http"
 // import * as papa from "pap
 import { AndroidPermissions } from "@ionic-native/android-permissions/ngx"
 import { Router, NavigationExtras } from '@angular/router';
+import { ToastController } from '@ionic/angular';
 @Component({
   selector: 'page-home',
   templateUrl: 'home.page.html'
@@ -20,7 +21,8 @@ export class HomePage {
               private ngZone: NgZone,
               private http : Http,
               private router : Router,
-              private androidPermissions: AndroidPermissions) { 
+              private androidPermissions: AndroidPermissions,
+              private toastCtrl : ToastController) { 
   }
 
 
@@ -43,10 +45,18 @@ export class HomePage {
     this.setStatus('Scanning for Bluetooth LE Devices');
     this.devices = [];  // clear list
 
-    this.ble.scan([], 5).subscribe(
+    // this.ble.scan([], 10).subscribe(
+    //   device => this.onDeviceDiscovered(device), 
+    //   error => this.scanError(error)
+    // );
+
+
+
+    this.ble.scan([], 10).subscribe(
       device => this.onDeviceDiscovered(device), 
       error => this.scanError(error)
     );
+
 
     setTimeout(this.setStatus.bind(this), 5000, 'Scan complete');
   }
@@ -54,19 +64,21 @@ export class HomePage {
   onDeviceDiscovered(device) {
     console.log('Discovered ' + JSON.stringify(device, null, 2));
     this.ngZone.run(() => {
-      this.devices.push(device);
+      if(device.name != undefined){
+        this.devices.push(device);
+      }
     });
   }
 
   // If location permission is denied, you'll end up here
-  scanError(error) {
+  async scanError(error) {
     this.setStatus('Error ' + error);
-    // let toast = this.toastCtrl.create({
-    //   message: 'Error scanning for Bluetooth low energy devices',
-    //   position: 'middle',
-    //   duration: 5000
-    // });
-    // toast.present();
+    let toast = await this.toastCtrl.create({
+      message: 'Error scanning for Bluetooth low energy devices',
+      position: 'middle',
+      duration: 5000
+    });
+    toast.present();
   }
 
   setStatus(message) {
