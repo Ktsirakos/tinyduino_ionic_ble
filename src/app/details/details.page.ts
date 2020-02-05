@@ -5,7 +5,7 @@ import { File } from '@ionic-native/file/ngx';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import * as papa from "papaparse"
 import { ThrowStmt } from '@angular/compiler';
-import { ModalController } from '@ionic/angular';
+import { ModalController, ToastController } from '@ionic/angular';
 import { ModaloptionsComponent } from '../modaloptions/modaloptions.component';
 import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
@@ -34,6 +34,7 @@ export class DetailsPage implements OnInit {
   fps : string = "FPS: 0"
   counter: any = 0;
   fpsInterval: any;
+  showConnectionStatus: boolean;
   constructor(
     private route: ActivatedRoute,
     private router : Router,
@@ -41,7 +42,8 @@ export class DetailsPage implements OnInit {
     private ngZone: NgZone,
     private file : File,
     private socialSharing : SocialSharing,
-    public modalController : ModalController
+    public modalController : ModalController,
+    private toastCtrl : ToastController
   ) {
 
 
@@ -83,7 +85,26 @@ export class DetailsPage implements OnInit {
     this.ngZone.run(() => {
       this.setStatus('');
       this.peripheral = peripheral;
-      this.readMessagesage()
+      this.ble.startNotification(this.peripheral.id , this.SERVICE ,"6e400003-b5a3-f393-e0a9-e50e24dcca9e").subscribe(
+        (message) => {
+          
+          if(this.started == true){
+            this.showConnectionStatus = false;
+            var converted = new Float32Array(message , 0 ,3)
+            console.log(converted)
+            // this.fps++;
+            this.acceleration = {
+              "x" : converted[0].toFixed(3).replace(/['"]+/g , ''),
+              "y" : converted[1].toFixed(3).replace(/['"]+/g , ''),
+              "z" : converted[2].toFixed(3).replace(/['"]+/g , ''),
+            }
+          }else{
+            this.showConnectionStatus = true;
+          }
+        },
+        e => console.error(e)
+      )
+      // this.readMessagesage()
     });
   }
 
@@ -112,10 +133,6 @@ export class DetailsPage implements OnInit {
     console.log("Called");
     clearInterval(this.writeInterval);
 
-    // this.presentModal().then(async () => {
-    //   const { data2 } = await this.modal.onDidDismiss()
-    //   console.log(data2);
-    // });
 
     await this.presentModal();
     const { data } = await this.modal.onDidDismiss();
@@ -154,9 +171,6 @@ export class DetailsPage implements OnInit {
         }).catch(() => {
           // Sharing via email is not possible
         });
-
-
-        
     }).catch(err => {
       console.error(err);
     });
@@ -187,21 +201,7 @@ export class DetailsPage implements OnInit {
       } , 1000)
       
   
-      this.ble.startNotification(this.peripheral.id , this.SERVICE ,"6e400003-b5a3-f393-e0a9-e50e24dcca9e").subscribe(
-        (message) => {
-          
-          
-          var converted = new Float32Array(message , 0 ,3)
-          console.log(converted)
-          // this.fps++;
-          this.acceleration = {
-            "x" : converted[0].toFixed(3).replace(/['"]+/g , ''),
-            "y" : converted[1].toFixed(3).replace(/['"]+/g , ''),
-            "z" : converted[2].toFixed(3).replace(/['"]+/g , ''),
-          }
-        },
-        e => console.error(e)
-      )
+      
     }
 
     // Disconnect peripheral when leaving the page

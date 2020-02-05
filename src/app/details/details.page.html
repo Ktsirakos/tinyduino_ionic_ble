@@ -41,6 +41,11 @@
         <p>{{stateMessage}}</p>
       </ion-col>
     </ion-row>
+    <ion-row *ngIf="showConnectionStatus">
+      <ion-col>
+        <p style="color:green; font-size:120%">Connected</p>
+      </ion-col>
+    </ion-row>
     <ion-row *ngIf="started">
       <ion-col>
         <p>X</p>
@@ -67,13 +72,17 @@
         <p>{{fps}}</p>
       </ion-col>
     </ion-row>
+ 
   </ion-grid>
 </ion-content>
 
 <ion-footer>
   <ion-toolbar>
-    <ion-button expand="full" *ngIf="buttonState == 'start'" (click)="readMessagesage()">Start</ion-button>
+    <ion-button expand="full" *ngIf="buttonState == 'start' && showConnectionStatus" (click)="readMessagesage()">Start</ion-button>
     <ion-button expand="full" *ngIf="buttonState == 'stop'" (click)="saveFile()">Stop</ion-button>
+    <ion-button expand="full" *ngIf="!showConnectionStatus && buttonState != 'stop'">
+          <ion-spinner duration="5000" name="dots"></ion-spinner>
+    </ion-button>
     <!-- <p>{{ statusMessage }}</p> -->
   </ion-toolbar>
 </ion-footer>

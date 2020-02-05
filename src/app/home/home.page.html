@@ -7,9 +7,10 @@
 </ion-header>
 
 <ion-content>
-
-
-  <ion-button color="primary" expand="full">Scan</ion-button>
+  <ion-button color="primary" style="height:100px; font-size:150%" (click)="scan()" expand="full">
+    <p *ngIf="!scanning">Scan</p>
+    <ion-spinner *ngIf="scanning" duration="5000" name="dots"></ion-spinner>
+  </ion-button>
    <ion-list> 
     <ion-button color="secondary" expand="full" style="height: 50px" *ngFor="let device of devices" (click)="deviceSelected(device)">
       <h2>{{ device.name }}</h2>

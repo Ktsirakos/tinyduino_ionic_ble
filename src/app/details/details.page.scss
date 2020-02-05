@@ -33,3 +33,10 @@ ion-button {
 p {
     text-align: center;
 }
+
+ion-spinner * {
+    width: 75px;
+    height: 75px;
+    stroke: #444;
+    fill: #222;
+  }

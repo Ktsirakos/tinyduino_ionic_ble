@@ -5,7 +5,7 @@ import { Http } from "@angular/http"
 // import * as papa from "pap
 import { AndroidPermissions } from "@ionic-native/android-permissions/ngx"
 import { Router, NavigationExtras } from '@angular/router';
-import { ToastController } from '@ionic/angular';
+import { ToastController, LoadingController } from '@ionic/angular';
 @Component({
   selector: 'page-home',
   templateUrl: 'home.page.html'
@@ -16,13 +16,16 @@ export class HomePage {
   statusMessage: string;
   headerRow: any;
   csv: any[];
+  scanning: boolean;
 
   constructor(private ble: BLE,
               private ngZone: NgZone,
               private http : Http,
               private router : Router,
               private androidPermissions: AndroidPermissions,
-              private toastCtrl : ToastController) { 
+              private toastCtrl : ToastController,
+              public loadingCtrl : LoadingController
+              ) { 
   }
 
 
@@ -36,8 +39,9 @@ export class HomePage {
     this.createMyCSV();
   }
   
+
   scan() {
-    
+    this.scanning = true;
     //TODO REMOVE THAT
     // let device : any = {"name" : "Test"};
     // this.router.navigate(['/details' , {device : JSON.stringify(device)}])
@@ -52,13 +56,21 @@ export class HomePage {
 
 
 
-    this.ble.scan([], 10).subscribe(
-      device => this.onDeviceDiscovered(device), 
+    this.ble.scan([], 5).subscribe(
+      device => {
+      //  this.onDeviceDiscovered(device), 
+       if(device.name == "AISA"){
+        this.deviceSelected(device);
+       }
+      },
       error => this.scanError(error)
     );
 
 
     setTimeout(this.setStatus.bind(this), 5000, 'Scan complete');
+    setTimeout(() => {
+      this.scanning = false;
+    } , 5000);
   }
 
   onDeviceDiscovered(device) {
@@ -66,7 +78,7 @@ export class HomePage {
     this.ngZone.run(() => {
       if(device.name != undefined){
         this.devices.push(device);
-      }
+    }
     });
   }
 
