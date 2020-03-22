@@ -107,7 +107,7 @@ export class HomePage {
     // });
 
 
-    this.router.navigate(['/details' , {device : JSON.stringify(device)}])
+    this.router.navigate(['/graphs-home' , {device : JSON.stringify(device)}])
   }
 
 

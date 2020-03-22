@@ -39,4 +39,5 @@ import { ModaloptionsComponent } from './modaloptions/modaloptions.component';
   ],
   bootstrap: [AppComponent]
 })
+
 export class AppModule {}

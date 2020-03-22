@@ -1,3 +1,4 @@
+import { BluetoothService } from './../services/bluetooth.service';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -16,6 +17,9 @@ import { ModaloptionsComponent } from '../modaloptions/modaloptions.component';
     IonicModule,
     DetailsPageRoutingModule,
   ],
-  declarations: [DetailsPage]
+  declarations: [DetailsPage],
+  providers : [
+    BluetoothService
+  ]
 })
 export class DetailsPageModule {}

@@ -1,0 +1,34 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Acceleration Graphs</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <div class="container">
+    <div class="animationCollumn" id="positiveX">
+    </div>
+    <div class="animationCollumn" id="negativeX"></div>
+    <div class="animationCollumn" id="coverPositiveX"></div>
+
+    <div class="animationCollumn" id="positiveY">
+    </div>
+    <div class="animationCollumn" id="negativeY"></div>
+    <div class="animationCollumn" id="coverPositiveY"></div>
+
+
+    <div class="animationCollumn" id="positiveZ">
+    </div>
+    <div class="animationCollumn" id="negativeZ"></div>
+    <div class="animationCollumn" id="coverPositiveZ"></div>
+    <!-- <div class="animationCollumn" id="yAxis">
+    </div>
+    <div class="animationCollumn" id="zAxis">
+    </div> -->
+  </div>
+
+  <ion-button (click)="onToggleDirection()">Toggle Direction</ion-button>
+
+
+</ion-content>

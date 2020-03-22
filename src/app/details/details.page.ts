@@ -1,3 +1,4 @@
+import { BluetoothService } from './../services/bluetooth.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Component, OnInit, NgZone } from '@angular/core';
 import { BLE } from '@ionic-native/ble/ngx';
@@ -35,6 +36,7 @@ export class DetailsPage implements OnInit {
   counter: any = 0;
   fpsInterval: any;
   showConnectionStatus: boolean;
+  dataInterval:any;
   constructor(
     private route: ActivatedRoute,
     private router : Router,
@@ -43,7 +45,8 @@ export class DetailsPage implements OnInit {
     private file : File,
     private socialSharing : SocialSharing,
     public modalController : ModalController,
-    private toastCtrl : ToastController
+    private toastCtrl : ToastController,
+    private bleAPI : BluetoothService
   ) {
 
 
@@ -62,51 +65,55 @@ export class DetailsPage implements OnInit {
       "y" : 0 ,
       "z" : 0
     };
-    this.ble.connect(this.peripheral.id).subscribe(
-      peripheral => this.onConnected(peripheral),
-      peripheral => this.onDeviceDisconnected(peripheral)
-    );
+
+    this.bleAPI.connectToDevice(this.peripheral).then(() => this.startTransmitting());
+    this.bleAPI.dummyTest();
+
+    // this.ble.connect(this.peripheral.id).subscribe(
+    //   peripheral => this.onConnected(peripheral),
+    //   peripheral => this.onDeviceDisconnected(peripheral)
+    // );
+
+    // this.bleAPI.createCSV();
+
+  }
 
 
+  
 
-    this.createMyCSV();
+  startTransmitting(){
+    this.dataInterval = setInterval(() => {
+      var acceleration = this.bleAPI.getCurrentAcceleration();
+      console.log(acceleration);
+    } , 500);
   }
   
-  
-  createMyCSV(){
-    this.csv = [];
-    this.headerRow = ["X" , "Y" , "Z" , "Time (ms)"];
-    console.log(this.csv)
-  }
-  
-
-  
-  onConnected(peripheral) {
-    this.ngZone.run(() => {
-      this.setStatus('');
-      this.peripheral = peripheral;
-      this.ble.startNotification(this.peripheral.id , this.SERVICE ,"6e400003-b5a3-f393-e0a9-e50e24dcca9e").subscribe(
-        (message) => {
+  // onConnected(peripheral) {
+  //   this.ngZone.run(() => {
+  //     this.setStatus('');
+  //     this.peripheral = peripheral;
+  //     this.ble.startNotification(this.peripheral.id , this.SERVICE ,"6e400003-b5a3-f393-e0a9-e50e24dcca9e").subscribe(
+  //       (message) => {
           
-          if(this.started == true){
-            this.showConnectionStatus = false;
-            var converted = new Float32Array(message , 0 ,3)
-            console.log(converted)
-            // this.fps++;
-            this.acceleration = {
-              "x" : converted[0].toFixed(3).replace(/['"]+/g , ''),
-              "y" : converted[1].toFixed(3).replace(/['"]+/g , ''),
-              "z" : converted[2].toFixed(3).replace(/['"]+/g , ''),
-            }
-          }else{
-            this.showConnectionStatus = true;
-          }
-        },
-        e => console.error(e)
-      )
-      // this.readMessagesage()
-    });
-  }
+  //         if(this.started == true){
+  //           this.showConnectionStatus = false;
+  //           var converted = new Float32Array(message , 0 ,3)
+  //           console.log(converted)
+  //           // this.fps++;
+  //           this.acceleration = {
+  //             "x" : converted[0].toFixed(3).replace(/['"]+/g , ''),
+  //             "y" : converted[1].toFixed(3).replace(/['"]+/g , ''),
+  //             "z" : converted[2].toFixed(3).replace(/['"]+/g , ''),
+  //           }
+  //         }else{
+  //           this.showConnectionStatus = true;
+  //         }
+  //       },
+  //       e => console.error(e)
+  //     )
+  //     // this.readMessagesage()
+  //   });
+  // }
 
   onDeviceDisconnected(peripheral){
     console.warn("Disconected from" , peripheral)
@@ -213,6 +220,7 @@ export class DetailsPage implements OnInit {
           console.log('Disconnected ' + JSON.stringify(this.peripheral))
           clearInterval(this.writeInterval);
           clearInterval(this.fpsInterval);
+          clearInterval(this.dataInterval);
           // this.router.navigateByUrl('/home');
         },
         () => console.log('ERROR disconnecting ' + JSON.stringify(this.peripheral))

@@ -1,0 +1,102 @@
+$top : 100px;
+$defaultheight : 200px;
+$defaultwidth : 40px;
+$extraOnCover : 6px;
+$extraOnCoverTop : 5px;
+
+.animationCollumn {
+    position: absolute;
+    background: gray;
+}
+
+.container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 90vw;
+    height: 80vh;
+}
+
+#positiveX {
+    background: red;
+    height: $defaultheight;
+    top: $top;
+    width: 40px;
+    left: 20px;
+}
+
+#coverPositiveX {
+    background: white;
+    width: calc(#{$defaultwidth} + #{$extraOnCover});
+    border: 0;
+    height: calc(#{$defaultheight} + #{$extraOnCoverTop});
+    top: calc(#{$top} - #{$extraOnCoverTop});
+    left: calc(20px - #{$extraOnCover}/2);
+}
+
+#negativeX {
+    background: red;
+    width: 40px;
+    height: $defaultheight;
+    top: calc(#{$top} + #{$defaultheight});
+    left: 20px;
+}
+
+
+#positiveY {
+    background: green;
+    height: $defaultheight;
+    top: $top;
+    width: 40px;
+    left: 185px;
+}
+
+#coverPositiveY {
+    background: white;
+    width: calc(#{$defaultwidth} + #{$extraOnCover});
+    border: 0;
+    height: calc(#{$defaultheight} + #{$extraOnCoverTop});
+    top: calc(#{$top} - #{$extraOnCoverTop});
+    left: calc(185px - #{$extraOnCover}/2);
+}
+
+#negativeY {
+    background: green;
+    width: 40px;
+    height: $defaultheight;
+    top: calc(#{$top} + #{$defaultheight});
+    left: 185px;
+}
+
+
+#positiveZ {
+    background: blue;
+    height: $defaultheight;
+    top: $top;
+    width: 40px;
+    left: 350px;
+}
+
+#coverPositiveZ {
+    background: white;
+    width: calc(#{$defaultwidth} + #{$extraOnCover});
+    border: 0;
+    height: calc(#{$defaultheight} + #{$extraOnCoverTop});
+    top: calc(#{$top} - #{$extraOnCoverTop});
+    left: calc(350px - #{$extraOnCover}/2);
+}
+
+#negativeZ {
+    background: blue;
+    width: 40px;
+    height: $defaultheight;
+    top: calc(#{$top} + #{$defaultheight});
+    left: 350px;
+}
+
+
+
+#zAxis {
+    background: purple;
+}
