@@ -1,3 +1,4 @@
+import { DataReplayService } from './../services/data-replay.service';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -15,6 +16,9 @@ import { GraphsHomePage } from './graphs-home.page';
     IonicModule,
     GraphsHomePageRoutingModule
   ],
-  declarations: [GraphsHomePage]
+  declarations: [GraphsHomePage],
+  providers : [
+    DataReplayService
+  ]
 })
 export class GraphsHomePageModule {}

@@ -96,6 +96,10 @@ export class BluetoothService {
     });
   }
 
+  public getCSVData(){
+    return this.csv;
+  }
+
 
 
   private readMessagesage() {
@@ -129,6 +133,10 @@ export class BluetoothService {
     this.csv = [];
     this.headerRow = ["X" , "Y" , "Z" , "Time (ms)"];
     console.log(this.csv)
+  }
+
+  public getHeaderCSVROw(){
+    return this.headerRow;
   }
 
 

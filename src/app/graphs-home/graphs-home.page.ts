@@ -1,6 +1,8 @@
+import { CalculationService } from './../services/calculation.service';
+import { DataReplayService } from './../services/data-replay.service';
 import { Platform, ToastController, ModalController } from '@ionic/angular';
 declare let require;
-import { Component, OnInit, NgZone } from '@angular/core';
+import { Component, OnInit, NgZone, ViewChild } from '@angular/core';
 import { createAnimation } from "@ionic/core";
 import { random } from 'random'
 import * as $ from "jquery";
@@ -9,6 +11,10 @@ import { BLE } from '@ionic-native/ble/ngx';
 import { Router, ActivatedRoute } from '@angular/router';
 import { isGeneratedFile } from '@angular/compiler/src/aot/util';
 
+
+
+import { Chart } from 'chart.js';
+
 var random = require('random');
 @Component({
   selector: 'app-graphs-home',
@@ -16,6 +22,9 @@ var random = require('random');
   styleUrls: ['./graphs-home.page.scss'],
 })
 export class GraphsHomePage implements OnInit {
+
+  @ViewChild('lineCanvas' , {static : false}) lineCanvas;
+  @ViewChild('lineCanvas2' , {static : false}) lineCanvas2;
 
   lastHeight : any = 0;
   intervalTime: number;
@@ -30,10 +39,13 @@ export class GraphsHomePage implements OnInit {
   peripheral: any;
   acceleration: any = {};
   dataInterval: any;
+  showCharts: boolean;
   constructor(
     private route: ActivatedRoute,
     public modalController : ModalController,
-    private bleAPI : BluetoothService
+    private bleAPI : BluetoothService,
+    private dataReplayProvider : DataReplayService,
+    private calculationService : CalculationService
   ) { 
 
 
@@ -41,9 +53,47 @@ export class GraphsHomePage implements OnInit {
 
   }
 
+
+  getData(){
+
+    const RANGE = (x,y) => Array.from((function*(){
+      while (x <= y) yield x++;
+    })());
+
+    console.log(RANGE(0 , 10));
+
+    var arrayVelocity = this.calculationService.getVelocities();
+    var myLineChart = new Chart(this.lineCanvas.nativeElement, {
+      type: 'line',
+      data: {
+        datasets: [{
+            data: arrayVelocity.x
+        }],
+        labels: arrayVelocity.time
+    },
+      options: {}
+    });
+
+
+    var accelerations = this.calculationService.getAccelerations();
+    var myLineChart2 = new Chart(this.lineCanvas2.nativeElement, {
+      type: 'line',
+      data: {
+        datasets: [{
+            data: accelerations.x
+        }],
+        labels: accelerations.time
+    },
+      options: {}
+    });
+
+  }
+
   ngOnInit() {
+    this.showCharts = true;
     // this.initAnimations();
     // this.playAnimations();
+
 
 
     this.peripheral =  JSON.parse(this.route.snapshot.paramMap.get("device"));

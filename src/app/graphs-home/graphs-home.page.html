@@ -6,7 +6,15 @@
 
 <ion-content>
 
-  <div class="container">
+  <div *ngIf="showCharts">
+    <canvas #lineCanvas></canvas>
+    <canvas #lineCanvas2></canvas>
+    <ion-button (click)="getData()">Get Data</ion-button>
+  </div>
+
+
+
+  <div *ngIf="!showCharts" class="container">
     <div class="animationCollumn" id="positiveX">
     </div>
     <div class="animationCollumn" id="negativeX"></div>
@@ -27,8 +35,8 @@
     <div class="animationCollumn" id="zAxis">
     </div> -->
   </div>
-
-  <ion-button (click)="onToggleDirection()">Toggle Direction</ion-button>
+  <!-- 
+  <ion-button (click)="onToggleDirection()">Toggle Direction</ion-button> -->
 
 
 </ion-content>

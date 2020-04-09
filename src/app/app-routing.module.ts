@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'home', pathMatch: 'full' },
+  { path: '', redirectTo: 'graphs-home', pathMatch: 'full' },
   {
     path: 'graphs-home',
     loadChildren: () => import('./graphs-home/graphs-home.module').then( m => m.GraphsHomePageModule)

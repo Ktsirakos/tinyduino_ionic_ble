@@ -5,10 +5,8 @@ import { BLE } from '@ionic-native/ble/ngx';
 import { File } from '@ionic-native/file/ngx';
 import { SocialSharing } from '@ionic-native/social-sharing/ngx';
 import * as papa from "papaparse"
-import { ThrowStmt } from '@angular/compiler';
 import { ModalController, ToastController } from '@ionic/angular';
 import { ModaloptionsComponent } from '../modaloptions/modaloptions.component';
-import { THIS_EXPR } from '@angular/compiler/src/output/output_ast';
 
 
 @Component({
@@ -58,7 +56,7 @@ export class DetailsPage implements OnInit {
     
     console.log(this.file.applicationStorageDirectory);
 
-    this.setStatus('Connecting to ' + this.peripheral.name || this.peripheral.id);
+    // this.setStatus('Connecting to ' + this.peripheral.name || this.peripheral.id);
 
     this.acceleration = {
       "x" : 0 ,
@@ -66,8 +64,8 @@ export class DetailsPage implements OnInit {
       "z" : 0
     };
 
-    this.bleAPI.connectToDevice(this.peripheral).then(() => this.startTransmitting());
-    this.bleAPI.dummyTest();
+    // this.bleAPI.connectToDevice(this.peripheral).then(() => this.startTransmitting());
+    // this.bleAPI.dummyTest();
 
     // this.ble.connect(this.peripheral.id).subscribe(
     //   peripheral => this.onConnected(peripheral),
@@ -82,9 +80,10 @@ export class DetailsPage implements OnInit {
   
 
   startTransmitting(){
+    this.showConnectionStatus = true;
     this.dataInterval = setInterval(() => {
-      var acceleration = this.bleAPI.getCurrentAcceleration();
-      console.log(acceleration);
+      this.acceleration = this.bleAPI.getCurrentAcceleration();
+      console.log(this.acceleration);
     } , 500);
   }
   
@@ -146,6 +145,10 @@ export class DetailsPage implements OnInit {
     console.log(data); 
     let senderEmail = data.email;
 
+    this.csv = this.bleAPI.getCSVData();
+    this.headerRow = this.bleAPI.getHeaderCSVROw();
+
+
     this.ble.stopNotification(this.peripheral.id , this.SERVICE ,"6e400003-b5a3-f393-e0a9-e50e24dcca9e").then(data => console.log(data)).catch(err => console.error(err));
     let csvBlob = papa.unparse({
       fields: this.headerRow,
@@ -193,19 +196,19 @@ export class DetailsPage implements OnInit {
 
       this.started = true;
       this.buttonState = "stop";
-      this.now = Date.now();
-      this.writeInterval = setInterval(() => {
-        this.csv.push([this.acceleration.x , this.acceleration.y , this.acceleration.z , Date.now() - this.now]);
-        this.counter++;
-        this.timeelapsed = `Time: ${((Date.now() - this.now) / 1000).toFixed(1)}s`
-        // console.log(this.acceleration);
-      } , 10)
+      // this.now = Date.now();
+      // this.writeInterval = setInterval(() => {
+      //   this.csv.push([this.acceleration.x , this.acceleration.y , this.acceleration.z , Date.now() - this.now]);
+      //   this.counter++;
+      //   this.timeelapsed = `Time: ${((Date.now() - this.now) / 1000).toFixed(1)}s`
+      //   // console.log(this.acceleration);
+      // } , 10)
 
 
-      this.fpsInterval = setInterval(() => {
-        this.fps = `FPS: ${this.counter}`
-        this.counter = 0;
-      } , 1000)
+      // this.fpsInterval = setInterval(() => {
+      //   this.fps = `FPS: ${this.counter}`
+      //   this.counter = 0;
+      // } , 1000)
       
   
       
