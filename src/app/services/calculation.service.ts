@@ -33,6 +33,11 @@ export class CalculationService {
     "z" : [],
     "time": []
   }
+  lastPositions: any = {
+    x : undefined,
+    y : undefined,
+    z : undefined
+  };
 
   constructor(
     private dataReplayService : DataReplayService,
@@ -54,6 +59,7 @@ export class CalculationService {
         console.log(this.velocity)
         return;
       }
+
       if(this.previousEntry == undefined) return;
 
       this.acceleration.x.push(this.currentEntry[0])
@@ -78,8 +84,18 @@ export class CalculationService {
       //                                       Math.pow(this.previousEntry[2],2)
       // );
 
-      
+      let previousVelocityForPos = undefined;
+      if(this.velocity.x.length > 0){
+        let size = this.velocity.x;
 
+        let previousVelocityForPos = {
+          x : this.velocity.x[size - 1],
+          y : this.velocity.y[size - 1],
+          z : this.velocity.z[size - 1],
+        }
+      }
+
+      ///Calculating Velocity
       this.lastVelocityX = this.fromAccelToVel(this.previousEntry[3] , this.currentEntry[3] ,
                                      this.previousEntry[0] , this.currentEntry[0],
                                      this.lastVelocityX
@@ -96,10 +112,10 @@ export class CalculationService {
                                               this.lastVelocityZ
        )
 
+
       if(isNaN(this.lastVelocityX)) {
         this.lastVelocityX = 0;
       }
-
 
       if(isNaN(this.lastVelocityY)) {
         this.lastVelocityY = 0;
@@ -113,7 +129,30 @@ export class CalculationService {
       this.velocity.y.push(this.lastVelocityY);
       this.velocity.z.push(this.lastVelocityZ);
 
-    } , 5);
+
+      // let lastPositionX = undefined;
+      // let lastPositionY = undefined;
+      // let lastPositionZ = undefined
+      // if(this.lastPositions != undefined){
+      //   // let lastPositionX =
+      //   // let 
+      // }
+
+      // //Calculating Position
+      // let positionToBePushed = {
+      //   x : this.fromVelToPos(this.previousEntry[3] , this.currentEntry[3] , 
+      //                         previousVelocityForPos.x , this.lastVelocityX , 
+      //                         this.lastPositionX),
+      //   y : this.fromVelToPos(this.previousEntry[3] , this.currentEntry[3] , 
+      //                         previousVelocityForPos.x , this.lastVelocityX , 
+      //                         this.lastPositionY),
+      //   z : this.fromVelToPos(this.previousEntry[3] , this.currentEntry[3] , 
+      //                         previousVelocityForPos.x , this.lastVelocityX , 
+      //                         this.lastPositionZ),
+                    
+      // }
+
+    } , 30);
 
    }
 
@@ -130,14 +169,20 @@ export class CalculationService {
      return this.acceleration;
    }
 
-   private fromVelToPos(previous_time , time , previous_vel , vel , lastPosition){
+   private fromVelToPos(previous_time , time , previous_vel , vel , lastPosition) : number{
       var t_i =  <number> parseFloat(time);
       var t_i_1 =  <number> parseFloat(previous_time);
       var vel_i =  <number> parseFloat(vel);
       var vel_i_1 =  <number> parseFloat(previous_vel);
       var lastPos = <number> parseFloat( lastPosition);
 
-      return (t_i - t_i_1)*((vel_i + vel_i_1) / 2) + lastPos;
+      let a : number = (t_i - t_i_1);
+      let b : number = (((vel_i) + vel_i_1) / 2)
+  
+      let c : number = a * b;
+      let d : number = c + lastPos;
+
+      return d;
    }
 
 
